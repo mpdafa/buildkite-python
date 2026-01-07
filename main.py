@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.get("/healthz")
 def healthz():
-    return jsonify(status="ok"), 200
+    return jsonify(status="OK"), 200
 
 @app.get("/")
 def root():

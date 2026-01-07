@@ -1,10 +1,35 @@
 steps:
   - label: ":python: Test"
+    key: "test"
     commands:
       - python -m venv .venv
       - . .venv/bin/activate
       - pip install -U pip
       - pip install -r requirements.txt
       - pytest -q
+    agents:
+      queue: "default"
+
+  - wait
+
+  - label: ":docker: Build & Push Image"
+    key: "build_push"
+    commands:
+      - echo "$DOCKER_PASSWORD" | docker login "$DOCKER_REGISTRY" -u "$DOCKER_USERNAME" --password-stdin
+      - docker build -t "$DOCKER_IMAGE:$BUILDKITE_COMMIT" .
+      - docker push "$DOCKER_IMAGE:$BUILDKITE_COMMIT"
+      - docker tag "$DOCKER_IMAGE:$BUILDKITE_COMMIT" "$DOCKER_IMAGE:latest"
+      - docker push "$DOCKER_IMAGE:latest"
+    agents:
+      queue: "docker"
+
+  - block: ":warning: Deploy to production?"
+    branches: "main"
+
+  - label: ":rocket: Deploy (SSH)"
+    key: "deploy"
+    branches: "main"
+    commands:
+      - .buildkite/deploy.sh
     agents:
       queue: "default"
