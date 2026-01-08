@@ -1,12 +1,14 @@
 steps:
-  - label: ":python: Test"
+  - label: ":python: Test (Docker Python)"
     key: "test"
     commands:
-      - python -m venv .venv
-      - . .venv/bin/activate
-      - pip install -U pip
-      - pip install -r requirements.txt
-      - pytest -q
+      - docker run --rm -v "$PWD:/app" -w /app python:3.12-slim bash -lc "
+          python -m venv .venv &&
+          . .venv/bin/activate &&
+          pip install -U pip &&
+          pip install -r requirements.txt &&
+          pytest -q
+        "
     agents:
       queue: "default"
 
