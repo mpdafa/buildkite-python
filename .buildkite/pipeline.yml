@@ -13,11 +13,8 @@ steps:
   - label: ":docker: Build & Push Image"
     key: "build_push"
     commands:
-  #    - echo "$DOCKER_PASSWORD" | docker login "$DOCKER_REGISTRY" -u "$DOCKER_USERNAME" --password-stdin
-      - docker build -t "mpdafa/buildkite-python:$BUILDKITE_COMMIT" .
-      - docker push "mpdafa/buildkite-python:$BUILDKITE_COMMIT"
-      - docker tag "mpdafa/buildkite-python:$BUILDKITE_COMMIT" "mpdafa/buildkite-python:latest"
-      - docker push "mpdafa/buildkite-python:latest"
+  #   - echo "$DOCKER_PASSWORD" | docker login "$DOCKER_REGISTRY" -u "$DOCKER_USERNAME" --password-stdin
+      - docker buildx build -t "mpdafa/buildkite-python:$BUILDKITE_COMMIT" -t "mpdafa/buildkite-python:latest" --push .
     agents:
       queue: "default"
 
