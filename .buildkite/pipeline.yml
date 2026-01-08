@@ -1,4 +1,6 @@
 steps:
+  - checkout
+
   - label: ":python: Test (Docker Python)"
     key: "test"
     commands:
