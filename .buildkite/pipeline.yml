@@ -21,7 +21,7 @@ steps:
       - docker tag "$DOCKER_IMAGE:$BUILDKITE_COMMIT" "$DOCKER_IMAGE:latest"
       - docker push "$DOCKER_IMAGE:latest"
     agents:
-      queue: "docker"
+      queue: "default"
 
   - block: ":warning: Deploy to production?"
     branches: "main"
