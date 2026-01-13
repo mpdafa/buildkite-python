@@ -6,7 +6,7 @@ steps:
       - pip install -r requirements.txt
       - pytest -q
     agents:
-      queue: "default"
+      queue: "local-mac"
 
   - wait
 
@@ -16,7 +16,7 @@ steps:
   #   - echo "$DOCKER_PASSWORD" | docker login "$DOCKER_REGISTRY" -u "$DOCKER_USERNAME" --password-stdin
       - docker buildx build -t "mpdafa/buildkite-python:$BUILDKITE_COMMIT" -t "mpdafa/buildkite-python:latest" --push .
     agents:
-      queue: "default"
+      queue: "local-mac"
 
   - block: ":warning: Deploy to production?"
     branches: "main"
@@ -27,4 +27,4 @@ steps:
     commands:
       - .buildkite/deploy.sh
     agents:
-      queue: "default"
+      queue: "local-mac"
